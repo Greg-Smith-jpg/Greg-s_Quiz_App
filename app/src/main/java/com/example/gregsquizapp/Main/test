@@ -1,0 +1,9 @@
+(for some reason i cant delete this file, not sure why)
+
+Quiz App
+
+DATABASE
+Quiz Tournament
+-Name, Category, Difficulty, Start Date, End Date, Rating(1-5), Questions
+Questions
+- 10 dynamically fetched from opentdb (multiple choice)
