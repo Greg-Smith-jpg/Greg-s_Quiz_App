@@ -3,6 +3,8 @@ package com.example.gregsquizapp.Admin;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +26,10 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 public class Admin_Dashboard extends AppCompatActivity {
 
@@ -32,6 +37,9 @@ public class Admin_Dashboard extends AppCompatActivity {
     private ArrayList<TournamentClass> tournamentList;
     private Admin_TournamentAdapter tournamentAdapter;
     private Tournaments tournamentDatabase;
+    private EditText txtSearchTournamentName;
+    private Button btnSearchTournaments;
+    private ArrayList<TournamentClass> allTournamentList;
     TextView txtCreateNewQuizTournament;
 
     @Override
@@ -49,12 +57,28 @@ public class Admin_Dashboard extends AppCompatActivity {
         recyclerAllTournaments.setLayoutManager(new LinearLayoutManager(this));
 
         tournamentList = new ArrayList<>();
+        allTournamentList = new ArrayList<>();
         tournamentAdapter = new Admin_TournamentAdapter(tournamentList);
         recyclerAllTournaments.setAdapter(tournamentAdapter);
+
+        txtSearchTournamentName = findViewById(R.id.txtSearchTournamentName);
+        btnSearchTournaments = findViewById(R.id.btnSearchTournaments);
 
         tournamentDatabase = new Tournaments();
 
         txtCreateNewQuizTournament = findViewById(R.id.txtCreateNewQuizTournament);
+
+
+
+        btnSearchTournaments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String searchText =
+                        txtSearchTournamentName.getText().toString();
+
+                filterAndSortTournaments(searchText);
+            }
+        });
 
         txtCreateNewQuizTournament.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,11 +100,13 @@ public class Admin_Dashboard extends AppCompatActivity {
                 new OnSuccessListener<List<TournamentClass>>() {
                     @Override
                     public void onSuccess(List<TournamentClass> loadedTournaments) {
-                        ArrayList<TournamentClass> newTournamentList = new ArrayList<>();
+                        allTournamentList.clear();
+
                         for (int i = 0; i < loadedTournaments.size(); i++) {
-                            newTournamentList.add(loadedTournaments.get(i));
+                            allTournamentList.add(loadedTournaments.get(i));
                         }
-                        tournamentAdapter.updateTournaments(newTournamentList);
+
+                        filterAndSortTournaments(txtSearchTournamentName.getText().toString());
                     }
                 },
                 new OnFailureListener() {
@@ -90,6 +116,33 @@ public class Admin_Dashboard extends AppCompatActivity {
                     }
                 }
         );
+    }
+
+    private void filterAndSortTournaments(String searchText){
+        ArrayList<TournamentClass> filteredTournaments = new ArrayList<>();
+        String searchName = searchText.trim().toLowerCase(Locale.ROOT);
+
+        for (int i = 0; i < allTournamentList.size(); i++) {
+            TournamentClass tournament = allTournamentList.get(i);
+            String tournamentName = tournament.getName();
+
+            if (tournamentName != null && tournamentName.toLowerCase(Locale.ROOT).contains(searchName)) {
+                filteredTournaments.add(tournament);
+            }
+        }
+
+        Collections.sort(filteredTournaments, new Comparator<TournamentClass>() {
+            @Override
+            public int compare(TournamentClass first, TournamentClass second) {
+                String firstName = first.getName();
+                String secondName = second.getName();
+
+
+                return firstName.compareToIgnoreCase(secondName);
+            }
+        });
+
+        tournamentAdapter.updateTournaments(filteredTournaments);
     }
 
 
