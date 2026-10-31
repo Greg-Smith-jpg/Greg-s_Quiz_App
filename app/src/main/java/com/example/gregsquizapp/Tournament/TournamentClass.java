@@ -13,6 +13,25 @@ public class TournamentClass {
     private String difficulty;
     private String startDate;
     private String endDate;
+    private String rating;
+    private int numberOfRatings;
+
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
+    public int getNumberOfRatings() {
+        return numberOfRatings;
+    }
+
+    public void setNumberOfRatings(int numberOfRatings) {
+        this.numberOfRatings = numberOfRatings;
+    }
+
     private List<QuestionClass> questions = new ArrayList<>();
     public TournamentClass() {
     }
