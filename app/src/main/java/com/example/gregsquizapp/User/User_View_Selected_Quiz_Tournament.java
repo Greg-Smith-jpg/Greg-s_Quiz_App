@@ -45,6 +45,7 @@ public class User_View_Selected_Quiz_Tournament extends AppCompatActivity {
     private String tournamentID, currentUserID;
     private ArrayList<QuestionClass> questions;
     private int currentQuestionIndex, score;
+    private long completionTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,6 +201,7 @@ public class User_View_Selected_Quiz_Tournament extends AppCompatActivity {
         quizQuestionScreen.setVisibility(View.GONE);
         quizCompleteScreen.setVisibility(View.VISIBLE);
         txtFinalScore.setText("Your score: " + score + "/10");
+        completionTime = System.currentTimeMillis();
     }
 
     private void saveParticipationTicket() {
@@ -217,6 +219,11 @@ public class User_View_Selected_Quiz_Tournament extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentSnapshot tournamentDocument) {
                         TournamentClass tournament = tournamentDocument.toObject(TournamentClass.class);
+                        participationTicket.setTournamentName(tournament.getName());
+                        participationTicket.setCategoryName(tournament.getCategoryName());
+                        participationTicket.setDifficulty(tournament.getDifficulty());
+                        participationTicket.setCompletionTime(completionTime);
+
                         int numberOfRatings = tournament.getNumberOfRatings();
                         double averageRating = rating;
 

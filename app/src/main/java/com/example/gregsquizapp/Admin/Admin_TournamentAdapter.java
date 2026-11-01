@@ -12,6 +12,7 @@ import com.example.gregsquizapp.R;
 import com.example.gregsquizapp.Tournament.TournamentClass;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class Admin_TournamentAdapter extends RecyclerView.Adapter<Admin_Tournament_ViewHolder> {
 
@@ -48,7 +49,11 @@ public class Admin_TournamentAdapter extends RecyclerView.Adapter<Admin_Tourname
         holder.txtTournamentDifficulty.setText(tournament.getDifficulty());
         holder.txtTournamentStartDate.setText(tournament.getStartDate());
         holder.txtTournamentEndDate.setText(tournament.getEndDate());
-        holder.txtTournamentRating.setText("Not yet rated");
+        if (tournament.getNumberOfRatings() == 0) {
+            holder.txtTournamentRating.setText("Not yet rated");
+        } else {
+            holder.txtTournamentRating.setText(String.format(Locale.ROOT, "%.1f/5 (%d ratings)", Double.parseDouble(tournament.getRating()), tournament.getNumberOfRatings()));
+        }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

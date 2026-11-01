@@ -103,10 +103,10 @@ public class Admin_View_Selected_Quiz_Tournament extends AppCompatActivity {
                 txtTournamentDifficulty.setText(tournament.getDifficulty());
                 txtTournamentStartDate.setText(tournament.getStartDate());
                 txtTournamentEndDate.setText(tournament.getEndDate());
-                if(tournament.getNumberOfRatings()==0){
+                if(tournament.getNumberOfRatings() == 0) {
                     txtTournamentRating.setText("Not yet rated");
-                }else{
-                    txtTournamentRating.setText(tournament.getRating());
+                } else {
+                    txtTournamentRating.setText(String.format(Locale.ROOT, "%.1f/5 (%d ratings)", Double.parseDouble(tournament.getRating()), tournament.getNumberOfRatings()));
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {

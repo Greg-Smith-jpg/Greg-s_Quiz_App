@@ -3,7 +3,12 @@ package com.example.gregsquizapp.Participation;
 public class ParticipationClass {
     private String userID;
     private String tournamentID;
+    private String tournamentName;
+    private String categoryName;
+    private String difficulty;
     private int score;
+    private int rating;
+    private long completionTime;
 
     public ParticipationClass(){
 
@@ -25,6 +30,30 @@ public class ParticipationClass {
         this.tournamentID = tournamentID;
     }
 
+    public String getTournamentName() {
+        return tournamentName;
+    }
+
+    public void setTournamentName(String tournamentName) {
+        this.tournamentName = tournamentName;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public String getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
+    }
+
     public int getScore() {
         return score;
     }
@@ -41,5 +70,11 @@ public class ParticipationClass {
         this.rating = rating;
     }
 
-    private int rating;
+    public long getCompletionTime() {
+        return completionTime;
+    }
+
+    public void setCompletionTime(long completionTime) {
+        this.completionTime = completionTime;
+    }
 }

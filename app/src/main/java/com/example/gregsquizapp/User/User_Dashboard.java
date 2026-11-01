@@ -44,7 +44,7 @@ public class User_Dashboard extends AppCompatActivity {
     private Spinner spinnerTournamentType;
     private Spinner spinnerTournamentCategory;
     private Spinner spinnerTournamentDifficulty;
-    private Button btnFilterTournaments;
+    private Button btnFilterTournaments, btnViewMyStats;
 
     private String[] tournamentTypes = {
             "All statuses",
@@ -96,6 +96,7 @@ public class User_Dashboard extends AppCompatActivity {
         spinnerTournamentCategory = findViewById(R.id.spinnerTournamentCategory);
         spinnerTournamentDifficulty = findViewById(R.id.spinnerTournamentDifficulty);
         btnFilterTournaments = findViewById(R.id.btnFilterTournaments);
+        btnViewMyStats = findViewById(R.id.btnViewMyStats);
 
         recyclerUserTournaments.setLayoutManager(new LinearLayoutManager(this));
 
@@ -121,6 +122,14 @@ public class User_Dashboard extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 showSelectedTournaments();
+            }
+        });
+
+        btnViewMyStats.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(User_Dashboard.this, User_View_My_Stats.class);
+                startActivity(intent);
             }
         });
     }

@@ -75,4 +75,10 @@
         android:clipToPadding="false"
         android:paddingBottom="8dp" />
 
+    <Button
+        android:id="@+id/btnViewMyStats"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View My Stats" />
+
 </LinearLayout>
