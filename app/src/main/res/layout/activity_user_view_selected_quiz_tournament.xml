@@ -1,10 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     tools:context=".User.User_View_Selected_Quiz_Tournament">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/txtQuizTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Quiz Tournament"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/quizQuestionScreen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtQuestionProgress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:gravity="center"
+                android:text="Question 1 of 10"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtQuestionText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:textSize="18sp" />
+
+            <RadioGroup
+                android:id="@+id/radioGroupAnswers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical">
+
+                <RadioButton
+                    android:id="@+id/answer1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <RadioButton
+                    android:id="@+id/answer2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <RadioButton
+                    android:id="@+id/answer3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <RadioButton
+                    android:id="@+id/answer4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </RadioGroup>
+
+            <Button
+                android:id="@+id/btnSubmitAnswer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Submit" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/quizCompleteScreen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/txtFinalScore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:gravity="center"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="Rate this tournament from 1 to 5" />
+
+            <RatingBar
+                android:id="@+id/ratingTournament"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:rating="1"
+                android:stepSize="1" />
+
+            <Button
+                android:id="@+id/btnSubmitRating"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Submit Rating" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

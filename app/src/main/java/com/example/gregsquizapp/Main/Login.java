@@ -67,7 +67,7 @@ public class Login extends AppCompatActivity {
             public void onClick(View v) {
                 email = txtLoginEmail.getText().toString();
                 password = txtLoginPassword.getText().toString();
-                if (!email.isEmpty() || !password.isEmpty()) { // if either are blank display error, otherwise attempt login
+                if (!email.isEmpty() && !password.isEmpty()) {
                     mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {

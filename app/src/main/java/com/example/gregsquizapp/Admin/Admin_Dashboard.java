@@ -126,7 +126,7 @@ public class Admin_Dashboard extends AppCompatActivity {
             TournamentClass tournament = allTournamentList.get(i);
             String tournamentName = tournament.getName();
 
-            if (tournamentName != null && tournamentName.toLowerCase(Locale.ROOT).contains(searchName)) {
+            if (tournamentName.toLowerCase(Locale.ROOT).contains(searchName)) {
                 filteredTournaments.add(tournament);
             }
         }

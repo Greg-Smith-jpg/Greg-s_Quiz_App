@@ -32,10 +32,8 @@ public class Tournaments {
             for (int i = 0; i<documents.size(); i++){
                 DocumentSnapshot document = documents.get(i);
                 TournamentClass tournament = document.toObject(TournamentClass.class);
-                if(tournament != null){
-                    tournament.setTournamentID(document.getId());
-                    tournaments.add(tournament);
-                }
+                tournament.setTournamentID(document.getId());
+                tournaments.add(tournament);
             }
             successListener.onSuccess(tournaments);
         }).addOnFailureListener(failureListener);

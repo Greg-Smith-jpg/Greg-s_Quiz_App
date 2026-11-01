@@ -25,10 +25,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -146,20 +146,12 @@ public class Admin_View_Selected_Quiz_Tournament extends AppCompatActivity {
             Toast.makeText(Admin_View_Selected_Quiz_Tournament.this, "Please enter details correctly", Toast.LENGTH_SHORT).show();
             return;
         }
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.ROOT);
-        dateFormat.setLenient(false);
-        dateFormat.setTimeZone(NZ_TIME_ZONE);
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/uuuu", Locale.ROOT);
+        LocalDate startDate = LocalDate.parse(startDateText, dateFormat);
+        LocalDate endDate = LocalDate.parse(endDateText, dateFormat);
 
-        try{
-            Date startDate = dateFormat.parse(startDateText);
-            Date endDate = dateFormat.parse(endDateText);
-
-            if(endDate.before(startDate)){
-                Toast.makeText(Admin_View_Selected_Quiz_Tournament.this, "End date cannot be before start date", Toast.LENGTH_SHORT).show();
-                return;
-            }
-        }catch(ParseException e){
-            Toast.makeText(Admin_View_Selected_Quiz_Tournament.this, "Enter valid dates",Toast.LENGTH_SHORT).show();
+        if (endDate.isBefore(startDate)) {
+            Toast.makeText(Admin_View_Selected_Quiz_Tournament.this, "End date cannot be before start date", Toast.LENGTH_SHORT).show();
             return;
         }
 

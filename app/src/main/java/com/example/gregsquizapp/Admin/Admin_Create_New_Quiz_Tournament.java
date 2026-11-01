@@ -16,7 +16,8 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 
@@ -112,19 +113,11 @@ public class Admin_Create_New_Quiz_Tournament extends AppCompatActivity {
                     Toast.makeText(Admin_Create_New_Quiz_Tournament.this, "Please enter all fields correctly", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.ROOT);
-                    dateFormat.setLenient(false);
-                    dateFormat.setTimeZone(NZ_TIME_ZONE);
+                    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/uuuu", Locale.ROOT);
+                    LocalDate startDate = LocalDate.parse(startDateText, dateFormat);
+                    LocalDate endDate = LocalDate.parse(endDateText, dateFormat);
 
-                    try {
-                        Date startDate = dateFormat.parse(startDateText);
-                        Date endDate = dateFormat.parse(endDateText);
-
-                        if(startDate == null || endDate == null || endDate.before(startDate)){
-                            Toast.makeText(Admin_Create_New_Quiz_Tournament.this, "Invalid dates", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                    } catch (Exception e){
+                    if (endDate.isBefore(startDate)) {
                         Toast.makeText(Admin_Create_New_Quiz_Tournament.this, "Invalid dates", Toast.LENGTH_SHORT).show();
                         return;
                     }

@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -85,6 +86,7 @@ public class Register extends AppCompatActivity {
                     user.put("username", username);
                     user.put("email", email);
                     user.put("user_group", user_group);
+                    user.put("participationTickets", new ArrayList<String>());
                     db.collection("users").document(uid).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
