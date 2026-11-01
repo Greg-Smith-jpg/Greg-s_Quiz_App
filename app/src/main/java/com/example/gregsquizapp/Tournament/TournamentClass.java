@@ -5,6 +5,7 @@ import com.example.gregsquizapp.Questions.QuestionClass;
 import java.util.ArrayList;
 import java.util.List;
 
+// stores the details and questions for a tournament
 public class TournamentClass {
     private String name;
     private String tournamentID;

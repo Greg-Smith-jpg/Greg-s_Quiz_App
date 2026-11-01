@@ -16,6 +16,8 @@ import java.util.Locale;
 
 public class Admin_TournamentAdapter extends RecyclerView.Adapter<Admin_Tournament_ViewHolder> {
 
+    // adds tournaments to the recyclerview
+
     private ArrayList<TournamentClass> tournaments;
 
     public Admin_TournamentAdapter(ArrayList<TournamentClass> tournaments) {

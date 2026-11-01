@@ -71,6 +71,7 @@ public class User_View_My_Stats extends AppCompatActivity {
         loadParticipationTickets();
     }
 
+    // gets the current users quiz tickets from firebase
     private void loadParticipationTickets() {
         db.collection("participation").whereEqualTo("userID", currentUserID).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -95,6 +96,7 @@ public class User_View_My_Stats extends AppCompatActivity {
                 });
     }
 
+    // calculates the users scores and ratings overall and by category and difficulty
     private void updateStats() {
         layoutAverageScorePerCategory.removeAllViews();
         layoutAverageScorePerDifficulty.removeAllViews();
@@ -208,6 +210,7 @@ public class User_View_My_Stats extends AppCompatActivity {
         }
     }
 
+    // adds a line of text to the stats page
     private void addAverageLine(LinearLayout layout, String text, boolean bold) {
         TextView averageLine = new TextView(this);
         averageLine.setText(text);
@@ -219,6 +222,7 @@ public class User_View_My_Stats extends AppCompatActivity {
         layout.addView(averageLine);
     }
 
+    // formats an average to one decimal place
     private String formatAverage(double average) {
         return String.format(Locale.ROOT, "%.1f", average);
     }

@@ -60,6 +60,7 @@ public class User_View_Completed_Quizzes extends AppCompatActivity {
         loadCompletedQuizzes();
     }
 
+    // gets the current users completed quiz tickets from firebase
     private void loadCompletedQuizzes() {
         txtCompletedQuizzesMessage.setVisibility(View.VISIBLE);
         txtCompletedQuizzesMessage.setText("Loading completed quizzes...");

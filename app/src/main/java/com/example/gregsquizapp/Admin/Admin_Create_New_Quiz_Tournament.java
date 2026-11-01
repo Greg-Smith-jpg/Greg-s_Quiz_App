@@ -96,6 +96,13 @@ public class Admin_Create_New_Quiz_Tournament extends AppCompatActivity {
         dateFormat.setTimeZone(NZ_TIME_ZONE);
         txtStartDate.setText(dateFormat.format(Calendar.getInstance(NZ_TIME_ZONE).getTime()));
 
+        txtStartDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePicker(txtStartDate);
+            }
+        });
+
         txtEndDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,43 +113,47 @@ public class Admin_Create_New_Quiz_Tournament extends AppCompatActivity {
         btnCreateTournament.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // create variables for name and start/end date of tournament
                 String tournamentName = txtTournamentName.getText().toString().trim();
                 String startDateText = txtStartDate.getText().toString().trim();
                 String endDateText = txtEndDate.getText().toString().trim();
+                // check if they are empty
                 if(tournamentName.isEmpty()||startDateText.isEmpty()||endDateText.isEmpty()){
                     Toast.makeText(Admin_Create_New_Quiz_Tournament.this, "Please enter all fields correctly", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                // set up date format and parse date strings into dateformat
                     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/uuuu", Locale.ROOT);
                     LocalDate startDate = LocalDate.parse(startDateText, dateFormat);
                     LocalDate endDate = LocalDate.parse(endDateText, dateFormat);
 
+                    //check if the end date is before the start date
                     if (endDate.isBefore(startDate)) {
                         Toast.makeText(Admin_Create_New_Quiz_Tournament.this, "Invalid dates", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                OpenTDBClient.getService().getQuestions(
-                        10,
-                        getSelectedCategoryID(),
-                        getSelectedDifficulty()).enqueue(new Callback<OpenTDBResponse>() {
+                    // uses getservice to access retrofit and calls getquestions using the selected category and difficulty
+                OpenTDBClient.getService().getQuestions(getSelectedCategoryID(), getSelectedDifficulty()).enqueue(new Callback<OpenTDBResponse>() {
                     @Override
                     public void onResponse(Call<OpenTDBResponse> call, Response<OpenTDBResponse> response) {
+                        //check response is successful
                         if (!response.isSuccessful() || response.body() == null){
                             Toast.makeText(Admin_Create_New_Quiz_Tournament.this, "Something went wrong with OpenTDB", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         
                         OpenTDBResponse apiResponse = response.body();
+                        //check to see if there are enough questions in with the selected category at the selected difficulty
                         if ( apiResponse.getResponseCode() !=0){
                             Toast.makeText(Admin_Create_New_Quiz_Tournament.this, "There aren;t enough of these type of questions for a quiz", Toast.LENGTH_SHORT).show();
                             return;
                         }
-
                         List<OpenTDBQuestion> apiQuestions = apiResponse.getResults();
                         if (apiQuestions == null || apiQuestions.size() !=10){
                             Toast.makeText(Admin_Create_New_Quiz_Tournament.this, "There aren;t enough of these type of questions for a quiz", Toast.LENGTH_SHORT).show();
                             return;
                         }
+                        // adds questions recieved from api call into a list
                         List<QuestionClass> questionsForQuiz = new ArrayList<>();
                         for (int i = 0; i < apiQuestions.size(); i++) {
                             OpenTDBQuestion apiQuestion = apiQuestions.get(i);
@@ -172,6 +183,7 @@ public class Admin_Create_New_Quiz_Tournament extends AppCompatActivity {
                             question.setAnswers(answers);
                             questionsForQuiz.add(question);
                         }
+                        // saves tournament
                         saveTournament(tournamentName, questionsForQuiz);
 
                     }
@@ -186,6 +198,7 @@ public class Admin_Create_New_Quiz_Tournament extends AppCompatActivity {
 
 
     }
+    // sets up the firebase table for the tournament with its questions and answers
     private void saveTournament(
             String tournamentName, List<QuestionClass> questions){
         TournamentClass tournament = new TournamentClass();
@@ -215,6 +228,7 @@ public class Admin_Create_New_Quiz_Tournament extends AppCompatActivity {
         );
     }
 
+    // set up for spinners, gives them their drop down menus
     private void setupSpinners(){
         ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,categories);
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -252,10 +266,12 @@ public class Admin_Create_New_Quiz_Tournament extends AppCompatActivity {
         );
         datePicker.show();
     }
+    // converts the position in the drop down into its category
     private int getSelectedCategoryID(){
         int selectedPosition = spinnerCategory.getSelectedItemPosition();
         return categoryIDs[selectedPosition];
     }
+    // convertrs the position in the dropdown into its difficulty
     private String getSelectedDifficulty() {
         String difficulty = spinnerDifficulty.getSelectedItem().toString();
         return difficulty.toLowerCase(Locale.ROOT);

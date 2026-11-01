@@ -1,5 +1,7 @@
 package com.example.gregsquizapp.User;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -95,6 +97,7 @@ public class User_View_Selected_Quiz_Tournament extends AppCompatActivity {
         loadTournament();
     }
 
+    // gets the selected tournament and its questions from firebase
     private void loadTournament() {
         db.collection("tournaments").document(tournamentID).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -120,6 +123,7 @@ public class User_View_Selected_Quiz_Tournament extends AppCompatActivity {
                 });
     }
 
+    // displays the current question and its answers
     private void showQuestion() {
         QuestionClass question = questions.get(currentQuestionIndex);
         List<String> answers = question.getAnswers();
@@ -162,6 +166,7 @@ public class User_View_Selected_Quiz_Tournament extends AppCompatActivity {
         }
     }
 
+    // checks the selected answer and moves to the next question or final score
     private void submitAnswer() {
         if (!answer1.isChecked() && !answer2.isChecked() && !answer3.isChecked() && !answer4.isChecked()) {
             Toast.makeText(this, "Please select an answer", Toast.LENGTH_SHORT).show();
@@ -178,6 +183,38 @@ public class User_View_Selected_Quiz_Tournament extends AppCompatActivity {
             checkAnswer(answer4);
         }
 
+    }
+
+    // checks if the selected answer is correct and shows the message box
+    private void checkAnswer(RadioButton selectedAnswer) {
+        String title;
+        String message;
+
+        if (selectedAnswer.getTag().equals("Correct answer")) {
+            score++;
+            title = "Correct!";
+            message = "You got the correct answer";
+        } else {
+            QuestionClass question = questions.get(currentQuestionIndex);
+            title = "Incorrect";
+            message = "The correct answer is: " + question.getCorrectAnswer();
+        }
+
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        moveToNextQuestion();
+                    }
+                })
+                .setCancelable(false)
+                .show();
+    }
+
+    // moves to the next question after the user presses ok
+    private void moveToNextQuestion() {
         currentQuestionIndex++;
 
         if (currentQuestionIndex < questions.size()) {
@@ -187,16 +224,7 @@ public class User_View_Selected_Quiz_Tournament extends AppCompatActivity {
         }
     }
 
-    private void checkAnswer(RadioButton selectedAnswer) {
-        if (selectedAnswer.getTag().equals("Correct answer")) {
-            score++;
-            Toast.makeText(this, "Correct!", Toast.LENGTH_SHORT).show();
-        } else {
-            QuestionClass question = questions.get(currentQuestionIndex);
-            Toast.makeText(this, "Incorrect. The correct answer is: " + question.getCorrectAnswer(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
+    // shows the final score and records when the quiz was completed
     private void showQuizComplete() {
         quizQuestionScreen.setVisibility(View.GONE);
         quizCompleteScreen.setVisibility(View.VISIBLE);
@@ -204,6 +232,7 @@ public class User_View_Selected_Quiz_Tournament extends AppCompatActivity {
         completionTime = System.currentTimeMillis();
     }
 
+    // saves the users score and rating and updates the tournament average
     private void saveParticipationTicket() {
         int rating = (int) ratingTournament.getRating();
 

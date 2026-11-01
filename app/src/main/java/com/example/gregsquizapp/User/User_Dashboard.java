@@ -155,6 +155,7 @@ public class User_Dashboard extends AppCompatActivity {
 
     }
 
+    // checks if the tournament is ongoing and that the user has not already participated
     private void openTournament(TournamentClass tournament) {
         LocalDate today = getTodayDate();
         LocalDate startDate = getDate(tournament.getStartDate());
@@ -182,6 +183,7 @@ public class User_Dashboard extends AppCompatActivity {
                 .addOnFailureListener(e -> Toast.makeText(User_Dashboard.this, "Could not check participation", Toast.LENGTH_SHORT).show());
     }
 
+    // gets all tournaments from firebase
     private void loadTournaments() {
         txtTournamentListMessage.setVisibility(View.VISIBLE);
         txtTournamentListMessage.setText("Loading tournaments...");
@@ -225,6 +227,7 @@ public class User_Dashboard extends AppCompatActivity {
         }
     }
 
+    // filters tournaments by status, category and difficulty
     private void showSelectedTournaments() {
         String selectedType = spinnerTournamentType.getSelectedItem().toString();
         String selectedCategory = spinnerTournamentCategory.getSelectedItem().toString();

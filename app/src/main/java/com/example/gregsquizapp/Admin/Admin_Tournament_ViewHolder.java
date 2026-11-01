@@ -17,6 +17,7 @@ public class Admin_Tournament_ViewHolder extends RecyclerView.ViewHolder {
     TextView txtTournamentEndDate;
     TextView txtTournamentRating;
 
+    // sets each cards text based on a specific tournament
     public Admin_Tournament_ViewHolder(@NonNull View itemView) {
         super(itemView);
 

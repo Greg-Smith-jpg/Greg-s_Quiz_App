@@ -72,6 +72,13 @@
             android:padding="8dp"
             android:text="Not yet rated" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Start date"
+            android:textStyle="bold" />
+
         <EditText
             android:id="@+id/txtSelectedTournamentStartDate"
             android:layout_width="match_parent"
@@ -79,6 +86,13 @@
             android:layout_marginTop="12dp"
             android:focusable="false"
             android:hint="Start date (dd/MM/yyyy)" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="End date"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/txtSelectedTournamentEndDate"
@@ -101,6 +115,13 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Delete Tournament" />
+
+        <Button
+            android:id="@+id/btnCancelTournament"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Cancel" />
 
     </LinearLayout>
 </ScrollView>

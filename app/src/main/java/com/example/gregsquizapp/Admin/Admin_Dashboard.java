@@ -70,6 +70,7 @@ public class Admin_Dashboard extends AppCompatActivity {
 
 
 
+        // when clicked refresh the tournaments searching by whatever is typed in the search bar
         btnSearchTournaments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,6 +81,7 @@ public class Admin_Dashboard extends AppCompatActivity {
             }
         });
 
+        // opens create new quiz activity
         txtCreateNewQuizTournament.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,12 +91,14 @@ public class Admin_Dashboard extends AppCompatActivity {
         });
     }
 
+    // basically refreshes the activity when its refocused
     @Override
     protected void onResume(){
         super.onResume();
         loadTournaments();
     }
 
+    //gets all tournaments, filtered by search
     private void loadTournaments(){
         tournamentDatabase.loadTournaments(
                 new OnSuccessListener<List<TournamentClass>>() {
@@ -118,6 +122,8 @@ public class Admin_Dashboard extends AppCompatActivity {
         );
     }
 
+    // filtering tournamnets by name
+    // if search is "" then it shows all
     private void filterAndSortTournaments(String searchText){
         ArrayList<TournamentClass> filteredTournaments = new ArrayList<>();
         String searchName = searchText.trim().toLowerCase(Locale.ROOT);

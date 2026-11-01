@@ -14,6 +14,7 @@ public class ParticipationClass {
 
     }
 
+    //used to track whether a specific user has participated in a specific quiz so that they cant do it aagain
     public String getUserID() {
         return userID;
     }

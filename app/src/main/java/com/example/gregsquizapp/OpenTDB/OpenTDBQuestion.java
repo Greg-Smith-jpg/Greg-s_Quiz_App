@@ -15,6 +15,8 @@ public class OpenTDBQuestion {
     @SerializedName("incorrect_answers")
     private List<String> incorrectAnswers;
 
+
+    //getters for the question from openTDB
     public String getType() {
         return type;
     }

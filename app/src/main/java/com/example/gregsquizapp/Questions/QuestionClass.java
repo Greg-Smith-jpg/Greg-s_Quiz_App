@@ -14,6 +14,7 @@ public class QuestionClass {
 
     }
 
+    //gets at sets question attributes
     public String getQuestion() {
         return question;
     }

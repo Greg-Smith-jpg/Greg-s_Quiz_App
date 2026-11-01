@@ -40,7 +40,7 @@ public class Admin_View_Selected_Quiz_Tournament extends AppCompatActivity {
 
     private EditText txtTournamentName,txtTournamentStartDate,txtTournamentEndDate;
     private TextView txtTournamentCategory,txtTournamentRating,txtTournamentDifficulty;
-    private Button btnSaveTournamentChanges,btnDeleteTournament;
+    private Button btnSaveTournamentChanges,btnDeleteTournament,btnCancelTournament;
     private FirebaseFirestore db;
 
     private String tournamentID;
@@ -62,6 +62,7 @@ public class Admin_View_Selected_Quiz_Tournament extends AppCompatActivity {
         txtTournamentEndDate = findViewById(R.id.txtSelectedTournamentEndDate);
         btnSaveTournamentChanges = findViewById(R.id.btnSaveTournamentChanges);
         btnDeleteTournament = findViewById(R.id.btnDeleteTournament);
+        btnCancelTournament = findViewById(R.id.btnCancelTournament);
 
         db = FirebaseFirestore.getInstance();
         tournamentID = getIntent().getStringExtra("tournamentID");
@@ -91,8 +92,16 @@ public class Admin_View_Selected_Quiz_Tournament extends AppCompatActivity {
                 confirmTournamentDeletion();
             }
         });
+
+        btnCancelTournament.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
+    // gets the selected tournament from firebase and displays its details
     private void loadTournamentDetails(){
         db.collection("tournaments").document(tournamentID).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -116,6 +125,7 @@ public class Admin_View_Selected_Quiz_Tournament extends AppCompatActivity {
             }
         });
     }
+    // opens the date picker and puts the chosen date in the text box
     private void showDatePicker(EditText dateField){
         Calendar today = Calendar.getInstance(NZ_TIME_ZONE);
         DatePickerDialog datePicker = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
@@ -137,6 +147,7 @@ public class Admin_View_Selected_Quiz_Tournament extends AppCompatActivity {
         datePicker.show();
     }
 
+    // checks the name and dates then saves the changes to firebase
     private void saveTournamentChanges(){
         String tournamentName = txtTournamentName.getText().toString().trim();
         String startDateText = txtTournamentStartDate.getText().toString().trim();
@@ -155,25 +166,35 @@ public class Admin_View_Selected_Quiz_Tournament extends AppCompatActivity {
             return;
         }
 
-        Map<String, Object> changes = new HashMap<>();
-            changes.put("name", tournamentName);
-            changes.put("startDate", startDateText);
-            changes.put("endDate", endDateText);
+        db.collection("participation").whereEqualTo("tournamentID", tournamentID).get()
+                .addOnSuccessListener(querySnapshot -> {
+                    if (!querySnapshot.isEmpty()) {
+                        Toast.makeText(Admin_View_Selected_Quiz_Tournament.this, "Cannot update a tournament that has been completed", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-            db.collection("tournaments").document(tournamentID).update(changes).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void unused) {
-                    Toast.makeText(Admin_View_Selected_Quiz_Tournament.this, "Tournament updated",Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(Admin_View_Selected_Quiz_Tournament.this, "Tournament updated",Toast.LENGTH_SHORT).show();
-                }
-            });
+                    Map<String, Object> changes = new HashMap<>();
+                    changes.put("name", tournamentName);
+                    changes.put("startDate", startDateText);
+                    changes.put("endDate", endDateText);
+
+                    db.collection("tournaments").document(tournamentID).update(changes).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Toast.makeText(Admin_View_Selected_Quiz_Tournament.this, "Tournament updated", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(Admin_View_Selected_Quiz_Tournament.this, "Could not update tournament", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                })
+                .addOnFailureListener(e -> Toast.makeText(Admin_View_Selected_Quiz_Tournament.this, "Could not check tournament participation", Toast.LENGTH_SHORT).show());
         }
 
+        // asks the admin to confirm before deleting the tournament
         private void confirmTournamentDeletion(){
         new AlertDialog.Builder(this).setTitle("Delete Tournament?")
                 .setMessage("Are you sure you want to delete this tournament?\nThis cannot be undone.")
@@ -185,21 +206,31 @@ public class Admin_View_Selected_Quiz_Tournament extends AppCompatActivity {
         }).setNegativeButton("Cancel", null).show();
         }
 
+        // checks if anyone has completed the tournament before deleting it
         private void deleteTournament() {
-            db.collection("tournaments").document(tournamentID).delete()
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            Toast.makeText(Admin_View_Selected_Quiz_Tournament.this, "Tournament deleted", Toast.LENGTH_SHORT).show();
-                            finish();
+            db.collection("participation").whereEqualTo("tournamentID", tournamentID).get()
+                    .addOnSuccessListener(querySnapshot -> {
+                        if (!querySnapshot.isEmpty()) {
+                            Toast.makeText(Admin_View_Selected_Quiz_Tournament.this, "Cannot delete a tournament that has been completed", Toast.LENGTH_SHORT).show();
+                            return;
                         }
+
+                        db.collection("tournaments").document(tournamentID).delete()
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        Toast.makeText(Admin_View_Selected_Quiz_Tournament.this, "Tournament deleted", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(Admin_View_Selected_Quiz_Tournament.this, "Could not delete tournament", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                     })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(Admin_View_Selected_Quiz_Tournament.this, "Could not delete tournament", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    .addOnFailureListener(e -> Toast.makeText(Admin_View_Selected_Quiz_Tournament.this, "Could not check tournament participation", Toast.LENGTH_SHORT).show());
         }
 
 

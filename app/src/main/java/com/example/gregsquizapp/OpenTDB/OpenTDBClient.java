@@ -8,6 +8,7 @@ public class OpenTDBClient {
     private static Retrofit retrofit;
     private static OpenTDBService service;
 
+    // checks if retrofit is set up, if not it sets up the retrofit service
     public static OpenTDBService getService() {
         if (service == null) {
             retrofit = new Retrofit.Builder()
